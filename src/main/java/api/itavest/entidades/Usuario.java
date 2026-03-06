@@ -18,8 +18,9 @@ public class Usuario {
     private String nome;
     private String email;
     private String telefone;
-    private String senha;
 
+    @JsonIgnore
+    private String senha;
 
     @JsonIgnore
     @OneToMany(mappedBy = "cliente")

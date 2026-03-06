@@ -108,6 +108,15 @@ public class Compra {
             }
         }
     }
+    public Double getTotal()
+    {
+        double soma = 0.0;
+        for (CompraItem item : compraItens)
+        {
+            soma += item.getSubtotal();
+        }
+        return soma;
+    }
 
     @Override
     public boolean equals(Object o) {

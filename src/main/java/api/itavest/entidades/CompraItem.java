@@ -63,6 +63,11 @@ public class CompraItem {
         this.preco = preco;
     }
 
+    public Double getSubtotal()
+    {
+        return preco * quantidade;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
