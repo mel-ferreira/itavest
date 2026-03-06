@@ -29,7 +29,7 @@ public class Compra {
     @OneToMany(mappedBy = "id.compra")
     private Set<CompraItem> compraItens = new HashSet<>();
 
-    public Compra(){}
+     public Compra(){}
 
     public Compra(Long id, Instant dataCompra, CompraStatus compraStatus, Usuario cliente) {
         this.id = id;

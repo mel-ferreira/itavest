@@ -1,8 +1,11 @@
 package api.itavest.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_acoes")
@@ -21,6 +24,9 @@ public class Acao {
         this.ticker = ticker;
         this.preco = preco;
     }
+
+    @OneToMany(mappedBy = "id.acao")
+    private Set<CompraItem> compraItens = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -44,6 +50,17 @@ public class Acao {
 
     public void setPreco(Double preco) {
         this.preco = preco;
+    }
+
+    @JsonIgnore
+    public Set<Compra> getCompras()
+    {
+        Set<Compra> set = new HashSet<>();
+        for (CompraItem item : compraItens)
+        {
+            set.add(item.getCompra());
+        }
+        return set;
     }
 
     @Override

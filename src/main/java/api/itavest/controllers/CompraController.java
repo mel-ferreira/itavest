@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/compras")
+    @RequestMapping("/compras")
 public class CompraController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class CompraController {
         List<Compra> listaCompra = compraServico.findAll();
         return ResponseEntity.ok().body(listaCompra);
     }
-    @GetMapping(value = "/{id}")
+    @GetMapping(value="/{id}")
     public ResponseEntity<Compra> findById(@PathVariable Long id)
     {
         Compra compraObj = compraServico.findById(id);
