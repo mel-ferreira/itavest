@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_compras")
@@ -23,6 +25,9 @@ public class Compra {
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Usuario cliente;
+
+    @OneToMany(mappedBy = "id.compra")
+    private Set<CompraItem> compraItens = new HashSet<>();
 
     public Compra(){}
 
@@ -61,12 +66,18 @@ public class Compra {
     {
         return CompraStatus.valueOf(compraStatus);
     }
+
     public void setCompraStatus(CompraStatus compraStatus)
     {
         if(compraStatus != null)
         {
             this.compraStatus = compraStatus.getCodigo();
         }
+    }
+
+    public Set<CompraItem> getCompraItens()
+    {
+        return compraItens;
     }
 
     @Override
