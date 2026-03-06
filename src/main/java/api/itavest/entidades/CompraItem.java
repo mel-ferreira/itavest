@@ -25,6 +25,7 @@ public class CompraItem {
         this.preco = preco;
     }
 
+    @JsonIgnore
     public Compra getCompra()
     {
         return id.getCompra();
