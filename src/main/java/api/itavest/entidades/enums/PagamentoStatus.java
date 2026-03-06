@@ -1,19 +1,19 @@
 package api.itavest.entidades.enums;
 
-public enum CompraStatus {
-    PAGAMENTO_PENDENTE(1),
-    PAGO(2),
+public enum PagamentoStatus {
+    PENDENTE(1),
+    EXECUTADO(2),
     CANCELADO(3);
 
     private int codigo;
 
-    CompraStatus(int codigo)
+    PagamentoStatus(int codigo)
     {
         this.codigo = codigo;
     }
-    public static CompraStatus valueOf(int codigo)
+    public static PagamentoStatus valueOf(int codigo)
     {
-        for (CompraStatus value : CompraStatus.values())
+        for (PagamentoStatus value : PagamentoStatus.values())
         {
             if(value.getCodigo() == codigo)
             {

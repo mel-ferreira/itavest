@@ -1,10 +1,8 @@
 package api.itavest.config;
 
-import api.itavest.entidades.Acao;
-import api.itavest.entidades.Compra;
-import api.itavest.entidades.CompraItem;
-import api.itavest.entidades.Usuario;
+import api.itavest.entidades.*;
 import api.itavest.entidades.enums.CompraStatus;
+import api.itavest.entidades.enums.PagamentoStatus;
 import api.itavest.repositorios.AcaoRepositorio;
 import api.itavest.repositorios.CompraItemRepositorio;
 import api.itavest.repositorios.CompraRepositorio;
@@ -41,11 +39,11 @@ public class TestConfig implements CommandLineRunner {
 
         usuarioRepositorio.saveAll(Arrays.asList(usuario1,usuario2));
 
-        Compra compra1 = new Compra(null, Instant.now(), CompraStatus.PAGO, usuario1);
-        Compra compra2 = new Compra(null, Instant.now(), CompraStatus.PAGO, usuario2);
-        Compra compra3 = new Compra(null, Instant.now(), CompraStatus.CANCELADO, usuario1);
+        Compra compra1 = new Compra(null, Instant.now(), usuario1);
+        Compra compra2 = new Compra(null, Instant.now(), usuario2);
+        Compra compra3 = new Compra(null, Instant.now(), usuario1);
 
-        compraRepositorio.saveAll(Arrays.asList(compra1,compra2,compra3));
+        compraRepositorio.saveAll(Arrays.asList(compra1, compra2, compra3));
 
         Acao acao1 = new Acao(null, "BLUT3", 48.75);
         Acao acao2 = new Acao(null, "GRNX4", 32.40);
@@ -60,6 +58,17 @@ public class TestConfig implements CommandLineRunner {
         CompraItem compraItem3 = new CompraItem(compra3, acao3, 10, acao3.getPreco());
 
         compraItemRepositorio.saveAll(Arrays.asList(compraItem1,compraItem2,compraItem3));
+
+        Pagamento pagamento1 = new Pagamento(null,Instant.now(), PagamentoStatus.EXECUTADO,compra1);
+        Pagamento pagamento2 = new Pagamento(null,Instant.now(), PagamentoStatus.PENDENTE,compra2);
+        Pagamento pagamento3 = new Pagamento(null,Instant.now(), PagamentoStatus.CANCELADO,compra3);
+
+        compra1.setPagamento(pagamento1);
+        compra2.setPagamento(pagamento2);
+        compra3.setPagamento(pagamento3);
+
+        compraRepositorio.saveAll(Arrays.asList(compra1,compra2,compra3));
+
 
     }
 }

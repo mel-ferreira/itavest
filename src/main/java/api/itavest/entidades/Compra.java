@@ -1,6 +1,7 @@
 package api.itavest.entidades;
 
 import api.itavest.entidades.enums.CompraStatus;
+import api.itavest.entidades.enums.PagamentoStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
@@ -13,14 +14,14 @@ import java.util.Set;
 @Table(name = "tb_compras")
 public class Compra {
 
-    private Integer compraStatus;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone="GMT")
     private Instant dataCompra;
+
+    private Integer compraStatus;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
@@ -29,12 +30,12 @@ public class Compra {
     @OneToMany(mappedBy = "id.compra")
     private Set<CompraItem> compraItens = new HashSet<>();
 
-     public Compra(){}
+    public Compra(){}
 
-    public Compra(Long id, Instant dataCompra, CompraStatus compraStatus, Usuario cliente) {
+    public Compra(Long id, Instant dataCompra, Usuario cliente) {
         this.id = id;
         this.dataCompra = dataCompra;
-        setCompraStatus(compraStatus);
+        setCompraStatus(CompraStatus.PAGAMENTO_PENDENTE);
         this.cliente = cliente;
     }
 
@@ -78,6 +79,34 @@ public class Compra {
     public Set<CompraItem> getCompraItens()
     {
         return compraItens;
+    }
+
+    @OneToOne(mappedBy = "compra", cascade = CascadeType.ALL)
+    private Pagamento pagamento;
+
+    public Pagamento getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
+
+        if (pagamento != null)
+        {
+            PagamentoStatus status = pagamento.getPagamentoStatus();
+
+            if (status == PagamentoStatus.EXECUTADO) {
+                setCompraStatus(CompraStatus.PAGO);
+            }
+
+            if (status == PagamentoStatus.PENDENTE) {
+                setCompraStatus(CompraStatus.PAGAMENTO_PENDENTE);
+            }
+
+            if (status == PagamentoStatus.CANCELADO) {
+                setCompraStatus(CompraStatus.CANCELADO);
+            }
+        }
     }
 
     @Override
