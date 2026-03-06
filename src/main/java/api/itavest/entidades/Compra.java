@@ -1,0 +1,83 @@
+package api.itavest.entidades;
+
+import api.itavest.entidades.enums.CompraStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
+
+import java.time.Instant;
+import java.util.Objects;
+
+@Entity
+@Table(name = "tb_compras")
+public class Compra {
+
+    private Integer compraStatus;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone="GMT")
+    private Instant dataCompra;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private Usuario cliente;
+
+    public Compra(){}
+
+    public Compra(Long id, Instant dataCompra, CompraStatus compraStatus, Usuario cliente) {
+        this.id = id;
+        this.dataCompra = dataCompra;
+        setCompraStatus(compraStatus);
+        this.cliente = cliente;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Instant getDataCompra() {
+        return dataCompra;
+    }
+
+    public void setDataCompra(Instant dataCompra) {
+        this.dataCompra = dataCompra;
+    }
+
+    public Usuario getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Usuario cliente) {
+        this.cliente = cliente;
+    }
+
+    public CompraStatus getCompraStatus()
+    {
+        return CompraStatus.valueOf(compraStatus);
+    }
+    public void setCompraStatus(CompraStatus compraStatus)
+    {
+        if(compraStatus != null)
+        {
+            this.compraStatus = compraStatus.getCodigo();
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Compra compra = (Compra) o;
+        return Objects.equals(id, compra.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+}
