@@ -2,6 +2,9 @@ package api.itavest.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +18,18 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Nome é obrigatório")
     private String nome;
+
+    @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Formato do email é inválido")
     private String email;
+
+    @NotBlank(message = "Telefone é obrigatório")
+    @Pattern(
+            regexp = "\\(?\\d{2}\\)?\\s?\\d{4,5}\\-?\\d{4}",
+            message = "Telefone deve estar no formato (XX) XXXXX-XXXX ou XXXXXXXXXXX"
+    )
     private String telefone;
 
     @JsonIgnore
