@@ -37,6 +37,17 @@ public class UsuarioController {
                 .path("/{id}").
                 buildAndExpand(usuarioObj.getId()).toUri();
         return ResponseEntity.created(uri).body(usuarioObj);
-
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarUsuario(@PathVariable Long id)
+    {
+        usuarioServico.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario obj)
+    {
+        obj = usuarioServico.update(id, obj);
+        return ResponseEntity.ok().body(obj);
     }
 }
