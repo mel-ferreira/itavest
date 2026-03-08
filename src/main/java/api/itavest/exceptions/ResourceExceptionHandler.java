@@ -1,5 +1,6 @@
 package api.itavest.exceptions;
 
+import api.itavest.servicos.exceptions.BusinessException;
 import api.itavest.servicos.exceptions.DatabaseException;
 import api.itavest.servicos.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +28,22 @@ public class ResourceExceptionHandler {
         String error = "Erro database";
         HttpStatus status = HttpStatus.BAD_REQUEST;
         StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<StandardError> business(BusinessException e, HttpServletRequest request)
+    {
+        String error = "Erro de regra de negócio";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        StandardError err = new StandardError(
+                Instant.now(),
+                status.value(),
+                error,
+                e.getMessage(),
+                request.getRequestURI()
+        );
+
         return ResponseEntity.status(status).body(err);
     }
 

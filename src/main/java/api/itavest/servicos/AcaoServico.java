@@ -23,5 +23,9 @@ public class AcaoServico {
         Optional<Acao> acaoObj =  acaoRepositorio.findById(id);
         return acaoObj.get();
     }
+    public List<Acao> findAcoesAbaixoDePreco()
+    {
+        return acaoRepositorio.findByPrecoLessThan(35.00);
+    }
 
 }

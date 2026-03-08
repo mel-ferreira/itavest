@@ -1,5 +1,6 @@
 package api.itavest.controllers;
 
+import api.itavest.dtos.AcaoDTO;
 import api.itavest.entidades.Acao;
 import api.itavest.servicos.AcaoServico;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +20,23 @@ public class AcaoController {
     private AcaoServico acaoServico;
 
     @GetMapping
-    public ResponseEntity<List<Acao>> findAll()
+    public ResponseEntity<List<AcaoDTO>> findAll()
     {
         List<Acao> listaAcao = acaoServico.findAll();
-        return ResponseEntity.ok().body(listaAcao);
+
+        List<AcaoDTO> listaAcaoDto = listaAcao.stream().
+                map(AcaoDTO::new).toList();
+        return ResponseEntity.ok().body(listaAcaoDto);
     }
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Acao> findById(@PathVariable Long id)
+    @GetMapping("/baratas")
+    public ResponseEntity<List<AcaoDTO>> findAcoesAbaixoDoPreco()
     {
-        Acao acaoObj = acaoServico.findById(id);
-        return ResponseEntity.ok().body(acaoObj);
+        List<Acao> lista = acaoServico.findAcoesAbaixoDePreco();
+
+        List<AcaoDTO> listaDto = lista.stream()
+                .map(AcaoDTO::new)
+                .toList();
+
+        return ResponseEntity.ok().body(listaDto);
     }
 }

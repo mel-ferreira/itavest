@@ -2,6 +2,7 @@ package api.itavest.servicos;
 
 import api.itavest.entidades.Usuario;
 import api.itavest.repositorios.UsuarioRepositorio;
+import api.itavest.servicos.exceptions.BusinessException;
 import api.itavest.servicos.exceptions.DatabaseException;
 import api.itavest.servicos.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,6 +31,10 @@ public class UsuarioServico {
         return usuarioObj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
     public Usuario insert(Usuario usuarioObj) {
+
+        if(usuarioRepositorio.existsByEmail(usuarioObj.getEmail())) {
+            throw new BusinessException("Email já cadastrado");
+        }
         return usuarioRepositorio.save(usuarioObj);
     }
     public void delete(Long id)

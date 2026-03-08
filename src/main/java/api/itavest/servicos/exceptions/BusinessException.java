@@ -1,7 +1,9 @@
 package api.itavest.servicos.exceptions;
 
 public class BusinessException extends RuntimeException {
-  public BusinessException(String message) {
-    super(message);
-  }
+    private static final long serialVersionUID = 1L;
+
+    public BusinessException(String msg){
+        super(msg);
+    }
 }

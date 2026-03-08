@@ -1,14 +1,16 @@
 package api.itavest.controllers;
 
+import api.itavest.dtos.CompraDTO;
+import api.itavest.dtos.PagamentoDTO;
 import api.itavest.entidades.Compra;
+import api.itavest.entidades.Usuario;
 import api.itavest.servicos.CompraServico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -19,16 +21,36 @@ public class CompraController {
     CompraServico compraServico;
 
     @GetMapping
-    public ResponseEntity<List<Compra>> findAll()
+    public ResponseEntity<List<CompraDTO>> findAll()
     {
         List<Compra> listaCompra = compraServico.findAll();
-        return ResponseEntity.ok().body(listaCompra);
+
+        List<CompraDTO> listaCompraDTO = listaCompra.stream()
+                .map(CompraDTO::new)
+                .toList();
+
+        return ResponseEntity.ok().body(listaCompraDTO);
     }
     @GetMapping(value="/{id}")
-    public ResponseEntity<Compra> findById(@PathVariable Long id)
+    public ResponseEntity<CompraDTO> findById(@PathVariable Long id)
     {
         Compra compraObj = compraServico.findById(id);
-        return ResponseEntity.ok().body(compraObj);
+        return ResponseEntity.ok().body(new CompraDTO(compraObj));
     }
+    @PostMapping("/{id}/pagar")
+    public ResponseEntity<Compra> pagarCompra(
+            @PathVariable Long id,
+            @RequestBody PagamentoDTO pagamentoDTO) {
+
+        Compra compra = compraServico.processarPagamento(id, pagamentoDTO.getValor());
+        return ResponseEntity.ok().body(compra);
+    }
+    @PostMapping("/{id}/cancelar")
+    public ResponseEntity<CompraDTO> cancelarPagamento(@PathVariable Long id) {
+
+        Compra compra = compraServico.cancelarPagamento(id);
+        return ResponseEntity.ok().body(new CompraDTO(compra));
+    }
+
 
 }
