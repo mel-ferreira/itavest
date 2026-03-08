@@ -6,6 +6,8 @@ import api.itavest.servicos.exceptions.BusinessException;
 import api.itavest.servicos.exceptions.DatabaseException;
 import api.itavest.servicos.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,12 +19,17 @@ import java.util.Optional;
 @Service
 public class UsuarioServico {
 
+    private static final Logger log = LoggerFactory.getLogger(UsuarioServico.class);
+
+
     @Autowired
     UsuarioRepositorio usuarioRepositorio;
 
     public List<Usuario> findAll()
     {
-        return usuarioRepositorio.findAll();
+        List<Usuario> listaUsuarios = usuarioRepositorio.findAll();
+        log.debug("Quantidade de usuários encontrados: {}", listaUsuarios.size());
+        return listaUsuarios;
     }
 
     public Usuario findById(Long id)

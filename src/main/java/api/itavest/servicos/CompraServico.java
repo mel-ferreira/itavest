@@ -2,12 +2,13 @@ package api.itavest.servicos;
 
 import api.itavest.entidades.Compra;
 import api.itavest.entidades.Pagamento;
-import api.itavest.entidades.Usuario;
 import api.itavest.entidades.enums.PagamentoStatus;
 import api.itavest.repositorios.CompraRepositorio;
 import api.itavest.servicos.exceptions.BusinessException;
 import api.itavest.servicos.exceptions.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,17 @@ import java.util.Optional;
 @Service
 public class CompraServico {
 
+    private static final Logger log = LoggerFactory.getLogger(CompraServico.class);
+
     @Autowired
     CompraRepositorio compraRepositorio;
 
     public List<Compra> findAll()
     {
-        return compraRepositorio.findAll();
+
+        List<Compra> listaCompras = compraRepositorio.findAll();
+        log.debug("Quantidade de compras encontradas: {}", listaCompras.size());
+        return listaCompras;
     }
 
     public Compra findById(Long id)
@@ -36,10 +42,6 @@ public class CompraServico {
 
         Compra compra = compraRepositorio.findById(compraId)
                 .orElseThrow(() -> new BusinessException("Compra não encontrada"));
-
-        if (compra == null) {
-            throw new BusinessException("Compra não existe");
-        }
 
         if (valor <= 0) {
             throw new BusinessException("Valor do pagamento deve ser positivo");
