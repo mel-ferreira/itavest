@@ -41,19 +41,32 @@ public class CompraServico {
     public Compra processarPagamento(Long compraId, Double valor) {
 
         Compra compra = compraRepositorio.findById(compraId)
-                .orElseThrow(() -> new BusinessException("Compra não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Compra não encontrada"));
 
         if (valor <= 0) {
             throw new BusinessException("Valor do pagamento deve ser positivo");
         }
 
-        if (compra.getPagamento() != null &&
-                compra.getPagamento().getPagamentoStatus() == PagamentoStatus.EXECUTADO) {
-
-            throw new BusinessException("Pagamento já foi processado");
+        if (valor == null) {
+            throw new BusinessException("Valor do pagamento não pode ser nulo");
+        }
+        if(!valor.equals(compra.getTotal()))
+        {
+            throw new BusinessException("Valor do pagamento deve ser igual ao total da compra");
         }
 
-        if (compra.getPagamento() != null) {
+        Pagamento pagamentoExistente = compra.getPagamento();
+
+        if (pagamentoExistente != null) {
+
+            if (pagamentoExistente.getPagamentoStatus() == PagamentoStatus.CANCELADO) {
+                throw new BusinessException("Compra já está cancelada");
+            }
+
+            if (pagamentoExistente.getPagamentoStatus() == PagamentoStatus.EXECUTADO) {
+                throw new BusinessException("Pagamento já foi processado");
+            }
+
             throw new BusinessException("Compra já possui pagamento");
         }
 

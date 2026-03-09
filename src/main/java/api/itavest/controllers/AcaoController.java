@@ -1,7 +1,9 @@
 package api.itavest.controllers;
 
 import api.itavest.dtos.AcaoDTO;
+import api.itavest.dtos.CompraDTO;
 import api.itavest.entidades.Acao;
+import api.itavest.entidades.Compra;
 import api.itavest.servicos.AcaoServico;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,13 @@ public class AcaoController {
 
     @Autowired
     private AcaoServico acaoServico;
+
+    @GetMapping(value="/{id}")
+    public ResponseEntity<AcaoDTO> findById(@PathVariable Long id)
+    {
+        Acao acaoObj = acaoServico.findById(id);
+        return ResponseEntity.ok().body(new AcaoDTO(acaoObj));
+    }
 
     @GetMapping
     public ResponseEntity<List<AcaoDTO>> findAll()

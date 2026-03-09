@@ -4,6 +4,7 @@ import api.itavest.dtos.UsuarioDTO;
 import api.itavest.dtos.UsuarioInsertDTO;
 import api.itavest.entidades.Usuario;
 import api.itavest.servicos.UsuarioServico;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,11 +36,12 @@ public class UsuarioController {
         return ResponseEntity.ok().body(new UsuarioDTO(usuarioObj));
     }
     @PostMapping
-    public ResponseEntity<UsuarioDTO> insertUsuario(@RequestBody UsuarioInsertDTO usuarioObj)
+    public ResponseEntity<UsuarioDTO> insertUsuario(@Valid @RequestBody UsuarioInsertDTO usuarioObj)
     {
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioObj.getNome());
         usuario.setEmail(usuarioObj.getEmail());
+        usuario.setTelefone(usuarioObj.getTelefone());
 
         usuario = usuarioServico.insert(usuario);
 
@@ -56,11 +58,12 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioInsertDTO  usuarioObj)
+    public ResponseEntity<UsuarioDTO> atualizarUsuario(@Valid @PathVariable Long id, @RequestBody UsuarioInsertDTO  usuarioObj)
     {
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioObj.getNome());
         usuario.setEmail(usuarioObj.getEmail());
+        usuario.setTelefone(usuarioObj.getTelefone());
 
         usuario = usuarioServico.update(id, usuario);
         return ResponseEntity.ok().body(new UsuarioDTO(usuario));

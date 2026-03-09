@@ -2,6 +2,7 @@ package api.itavest.servicos;
 
 import api.itavest.entidades.Acao;
 import api.itavest.repositorios.AcaoRepositorio;
+import api.itavest.servicos.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +26,8 @@ public class AcaoServico {
     }
     public Acao findById(Long id)
     {
-        Optional<Acao> acaoObj =  acaoRepositorio.findById(id);
-        return acaoObj.get();
+        return acaoRepositorio.findById(id)
+         .orElseThrow(() -> new ResourceNotFoundException("Ação não encontrada"));
     }
     public List<Acao> findAcoesAbaixoDePreco()
     {

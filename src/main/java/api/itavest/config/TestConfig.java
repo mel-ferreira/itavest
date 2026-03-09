@@ -57,6 +57,7 @@ public class TestConfig implements CommandLineRunner {
         Compra compra9 = new Compra(null, Instant.now(), usuario7);
         Compra compra10 = new Compra(null, Instant.now(), usuario8);
         Compra compra11 = new Compra(null, Instant.now(), usuario9);
+        Compra compra12 = new Compra(null, Instant.now(), usuario1);
 
 
         compraRepositorio.saveAll(Arrays.asList(compra1, compra2, compra3, compra4, compra5, compra6, compra7, compra8, compra9, compra10, compra11));
@@ -80,6 +81,7 @@ public class TestConfig implements CommandLineRunner {
         CompraItem compraItem9 = new CompraItem(compra9, acao4, 8, acao4.getPreco());
         CompraItem compraItem10 = new CompraItem(compra10, acao5, 15, acao5.getPreco());
         CompraItem compraItem11 = new CompraItem(compra11, acao5, 3, acao5.getPreco());
+        CompraItem compraItem12 = new CompraItem(compra12, acao3, 12, acao5.getPreco());
 
 
         compraItemRepositorio.saveAll(Arrays.asList(compraItem1,compraItem2,compraItem3, compraItem4, compraItem5, compraItem6, compraItem7, compraItem8, compraItem9, compraItem10, compraItem11));
